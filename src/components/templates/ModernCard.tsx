@@ -1,0 +1,63 @@
+import { QRCodeSVG } from "qrcode.react";
+import { BusinessCardData } from "../BusinessCardForm";
+import { Mail, Phone, Globe } from "lucide-react";
+
+interface ModernCardProps {
+  data: BusinessCardData;
+}
+
+export const ModernCard = ({ data }: ModernCardProps) => {
+  const vCardData = `BEGIN:VCARD
+VERSION:3.0
+FN:${data.name}
+TITLE:${data.title}
+ORG:${data.company}
+EMAIL:${data.email}
+TEL:${data.phone}
+URL:${data.website}
+ADR:${data.address}
+END:VCARD`;
+
+  return (
+    <div className="w-full aspect-[1.75/1] bg-gradient-to-br from-primary to-accent rounded-lg p-8 flex flex-col justify-between relative overflow-hidden shadow-lg">
+      <div className="absolute inset-0 bg-grid-white/5 bg-[size:20px_20px]"></div>
+      
+      <div className="relative z-10">
+        <div className="inline-block bg-white/20 backdrop-blur-sm rounded-lg px-3 py-1 mb-4">
+          <p className="text-xs font-medium text-white">{data.company || "Company Name"}</p>
+        </div>
+        <h3 className="text-2xl font-bold text-white mb-1">{data.name || "Your Name"}</h3>
+        <p className="text-sm text-white/90">{data.title || "Job Title"}</p>
+      </div>
+      
+      <div className="flex justify-between items-end relative z-10">
+        <div className="space-y-1.5 text-xs text-white/95">
+          {data.email && (
+            <div className="flex items-center gap-2">
+              <Mail className="w-3 h-3" />
+              <span>{data.email}</span>
+            </div>
+          )}
+          {data.phone && (
+            <div className="flex items-center gap-2">
+              <Phone className="w-3 h-3" />
+              <span>{data.phone}</span>
+            </div>
+          )}
+          {data.website && (
+            <div className="flex items-center gap-2">
+              <Globe className="w-3 h-3" />
+              <span>{data.website}</span>
+            </div>
+          )}
+        </div>
+        
+        {data.name && data.email && (
+          <div className="bg-white p-2 rounded-lg">
+            <QRCodeSVG value={vCardData} size={60} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
